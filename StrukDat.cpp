@@ -75,7 +75,7 @@ BenchmarkResult benchResults[10];
 int benchCount = 0;
 
 // Benchmark runs constant
-const int BENCHMARK_RUNS = 10;
+const int BENCHMARK_RUNS = 3;
 
 const int BOX_W = 60;
 
