@@ -1,8 +1,12 @@
 // ============================================================
 //  ANALISIS ALGORITMA SHELL SORT
 //  Dataset : Student Performance (StudentsPerformance.csv)
-
-
+// ============================================================
+//                         KELOMPOK 10B 
+//              Ajis Aditya Al Zahril - 2509106048
+//              Yoga Pramudya Ananta  - 2509106049
+//              AHMAD MUJAHID         - 2509106059
+//              Muhammad Fachri Akbar - 2509106076
 
 #include <iostream>
 #include <fstream>
@@ -17,22 +21,19 @@
 
 using namespace std;
 
-// ============================================================
-//  IDENTITAS MAHASISWA 
-// ============================================================
+// MAHASISWA 
+
 const string ANGGOTA1 = "Ajis Aditya Al Zahril - 2509106048";
 const string ANGGOTA2 = "Yoga Pramudya Ananta  - 2509106049";
 const string ANGGOTA3 = "AHMAD MUJAHID         - 2509106059";
 const string ANGGOTA4 = "Muhammad Fachri Akbar - 2509106076";
 
-// ============================================================
+
 //  KAPASITAS DATA
-// ============================================================
 const int MAX_DATA = 1000000;
 
-// ============================================================
+
 //  STRUCT
-// ============================================================
 struct Student {
     string gender;
     string raceEthnicity;
@@ -44,9 +45,7 @@ struct Student {
     int    writingScore;
 };
 
-// ============================================================
-//  BENCHMARK RESULT STRUCT
-// ============================================================
+
 struct BenchmarkResult {
     string  datasetName;
     int     recordCount;
@@ -56,9 +55,8 @@ struct BenchmarkResult {
     bool    valid;
 };
 
-// ============================================================
 //  GLOBALS
-// ============================================================
+
 Student* students = new Student[MAX_DATA];
 int n = 0;
 
@@ -79,9 +77,9 @@ const int BENCHMARK_RUNS = 3;
 
 const int BOX_W = 60;
 
-// ============================================================
+
 //  CONSOLE HELPERS
-// ============================================================
+
 void hideCursor() {
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO ci;
@@ -151,18 +149,18 @@ double calcMemoryMB(int count) {
     return (double)(sizeof(Student) * count) / (1024.0 * 1024.0);
 }
 
-// ============================================================
+
 //  UI BUILDING BLOCKS
-// ============================================================
+
 void printMessageBox(const string& msg) {
     cout << "\n " << string(BOX_W, '_') << "\n";
     cout << "|" << centerText(msg, BOX_W) << "|\n";
     cout << "|" << string(BOX_W, '_') << "|\n";
 }
 
-// ============================================================
+
 //  SPLASH SCREEN
-// ============================================================
+
 void showSplashScreen() {
     clearScreen();
     cout << "\n\n";
@@ -197,9 +195,19 @@ void showSplashScreen() {
     _getch();
 }
 
-// ============================================================
+
 //  MAIN MENU  (arrow-key cursor)
-// ============================================================
+
+
+void gotoXY(int x, int y)
+{
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+
 void drawMainMenu(int cursor) {
     const int MENU_COUNT = 10;
     const string items[MENU_COUNT] = {
@@ -215,7 +223,7 @@ void drawMainMenu(int cursor) {
         "Keluar"
     };
 
-    clearScreen();
+    gotoXY(0,0);
 
     cout << " " << string(BOX_W, '_') << "\n";
     cout << "|" << centerText("ANALISIS ALGORITMA SHELL SORT", BOX_W) << "|\n";
@@ -245,9 +253,9 @@ void drawMainMenu(int cursor) {
     cout << "\n  [UP/DOWN] Navigasi   [ENTER] Pilih   [ESC] Keluar\n";
 }
 
-// ============================================================
+
 //  INPUT BOX
-// ============================================================
+
 string drawInputBox(const string& title,
                     const string& label,
                     const string& defaultVal = "") {
@@ -282,9 +290,9 @@ string drawInputBox(const string& title,
     }
 }
 
-// ============================================================
+
 //  FIELD SELECTION MENU
-// ============================================================
+
 int drawFieldMenu() {
     const int CNT = 3;
     const string fields[CNT] = {
@@ -323,9 +331,9 @@ int drawFieldMenu() {
     }
 }
 
-// ============================================================
+
 //  ORDER SELECTION MENU
-// ============================================================
+
 int drawOrderMenu() {
     const int CNT = 2;
     const string orders[CNT] = {
@@ -363,9 +371,9 @@ int drawOrderMenu() {
     }
 }
 
-// ============================================================
+
 //  COMPLEXITY INFO HELPER
-// ============================================================
+
 void getComplexityInfo(int algoType,
                        string& worstCase,
                        string& avgCase,
@@ -373,7 +381,7 @@ void getComplexityInfo(int algoType,
     switch (algoType) {
         case 1:
             worstCase = "O(n^2)";
-            avgCase   = "O(n^2)";
+            avgCase   = "O(n^1.5)";
             bestCase  = "O(n log n)";
             break;
         case 2:
@@ -393,9 +401,9 @@ void getComplexityInfo(int algoType,
     }
 }
 
-// ============================================================
-//  ANALYSIS RESULT BOX  (with gap sequence + complexity + avg time)
-// ============================================================
+
+//  ANALYSIS RESULT BOX  
+
 void drawAnalysisBox(const string& algoName,
                      int           algoType,
                      const string& fieldName,
@@ -476,9 +484,9 @@ void drawAnalysisBox(const string& algoName,
     cout << "|" << string(BOX_W, '_') << "|\n";
 }
 
-// ============================================================
+
 //  CSV LOADING HELPERS
-// ============================================================
+
 string parseCSVField(stringstream& ss, char delim = ',') {
     string result;
 
@@ -538,10 +546,9 @@ bool validateHeader(const string& headerLine) {
     return true;
 }
 
-// ============================================================
-//  LOAD CSV INTO A GIVEN ARRAY (returns count loaded, -1 on error)
-//  errorMsg filled on failure.
-// ============================================================
+
+//  LOAD CSV INTO A GIVEN ARRAY 
+
 int loadCSVInto(const string& filename, Student* arr, int maxCount,
                 string& errorMsg) {
     // Check file exists
@@ -605,9 +612,9 @@ int loadCSVInto(const string& filename, Student* arr, int maxCount,
     return count;
 }
 
-// ============================================================
-//  LOAD CSV  (main dataset into global students[])
-// ============================================================
+
+//  LOAD CSV  
+
 bool loadCSV(const string& filename) {
 
     // Jika sudah ada data, beri peringatan data lama akan ditimpa
@@ -639,10 +646,11 @@ bool loadCSV(const string& filename) {
     return true;
 }
 
-// ============================================================
-//  DISPLAY DATA  (paged, 20 rows/page)
-// ============================================================
+
+//  DISPLAY DATA  
+
 void displayData() {
+    clearScreen();
     if (n == 0) {
         printMessageBox("Tidak ada data! Load CSV terlebih dahulu.");
         _getch();
@@ -654,7 +662,7 @@ void displayData() {
     int page = 0;
 
     while (true) {
-        clearScreen();
+        gotoXY(0,0);
 
         int start = page * ROWS;
         int end   = (start + ROWS < n) ? start + ROWS : n;
@@ -666,7 +674,7 @@ void displayData() {
         cout << "|" << centerText("DATA STUDENT PERFORMANCE", 90) << "|\n";
         cout << "|" << centerText(pageInfo, 90) << "|\n";
         cout << "|" << string(90, '_') << "|\n\n";
-
+        
         cout << left
              << setw(5)  << "No"
              << setw(8)  << "Gender"
@@ -704,9 +712,9 @@ void displayData() {
     }
 }
 
-// ============================================================
+
 //  INFORMASI DATASET
-// ============================================================
+
 void showDatasetInfo() {
     if (n == 0) {
         clearScreen();
@@ -790,9 +798,8 @@ void showDatasetInfo() {
     _getch();
 }
 
-// ============================================================
-//  SHELL SORT ALGORITHMS
-// ============================================================
+
+//  SHELL SORT ALGORITHM
 
 int getScore(const Student& s, int field) {
     switch (field) {
@@ -934,11 +941,9 @@ void shellSortSedgewick(Student* arr, int size, int field, bool ascending,
     }
 }
 
-// ============================================================
+
 //  RUN SORT WITH AVERAGE TIME (BENCHMARK_RUNS iterations)
-// ============================================================
-// Returns average execution time in ms.
-// Last-run comparisons/movements and gap info are stored in out params.
+
 double runSortAvg(int algoType,
                   Student* srcArr, int size, int field, bool ascending,
                   long long& comparisons, long long& movements,
@@ -982,9 +987,9 @@ double runSortAvg(int algoType,
     return totalMs / BENCHMARK_RUNS;
 }
 
-// ============================================================
+
 //  EXPORT CSV
-// ============================================================
+
 bool exportCSV(const string& filename) {
     ofstream file(filename);
     if (!file.is_open()) return false;
@@ -1007,9 +1012,9 @@ bool exportCSV(const string& filename) {
     return true;
 }
 
-// ============================================================
+
 //  EXPORT BENCHMARK RESULTS TO CSV
-// ============================================================
+
 bool exportBenchmarkCSV(const string& filename, int field) {
     if (benchCount == 0) return false;
 
@@ -1043,9 +1048,8 @@ bool exportBenchmarkCSV(const string& filename, int field) {
     return true;
 }
 
-// ============================================================
-//  SORTING HANDLER  (single algo, with avg time)
-// ============================================================
+//  SORTING HANDLER  
+
 void runSort(int algoType) {
     if (n == 0) {
         clearScreen();
@@ -1095,11 +1099,7 @@ void runSort(int algoType) {
 
     // Average: run on fresh copies
     Student* tempArr = new Student[n];
-    // We already sorted students, so reload a pristine copy isn't possible here
-    // We use the sorted array and run BENCHMARK_RUNS-1 more times for average estimate
-    // (standard approach: sort already-sorted data for timing reference,
-    //  but for fair avg we run on copies of the original-order, which we no longer have)
-    // Solution: run BENCHMARK_RUNS on already-sorted (best-case timing reference)
+
     double totalAvgMs = ms;
     for (int run = 1; run < BENCHMARK_RUNS; run++) {
         for (int i = 0; i < n; i++) tempArr[i] = students[i];
@@ -1133,9 +1133,9 @@ void runSort(int algoType) {
     displayData();
 }
 
-// ============================================================
+
 //  BANDINGKAN SEMUA ALGORITMA
-// ============================================================
+
 void runComparison() {
     if (n == 0) {
         clearScreen();
@@ -1220,7 +1220,7 @@ void runComparison() {
     double ms3 = totalMs3 / BENCHMARK_RUNS;
 
     clearScreen();
-    const int TW = 76;
+    const int TW = 79;
 
     cout << "\n " << string(TW, '_') << "\n";
     cout << "|" << centerText("HASIL PERBANDINGAN ALGORITMA", TW) << "|\n";
@@ -1230,12 +1230,12 @@ void runComparison() {
     cout << "|" << string(TW, '-') << "|\n";
 
     cout << "|"
-         << left  << setw(24) << " Algoritma"
-         << right << setw(13) << "Compare"
-         << right << setw(13) << "Movement"
-         << right << setw(14) << "Avg Time"
-         << right << setw(14) << "Memory"
-         << " |\n";
+        << left << setw(23) << " Algoritma"
+        << left << setw(13) << "Compare"
+        << left << setw(13) << "Movement"
+        << left << setw(14) << "Avg Time"
+        << left << setw(15) << "Memory"
+        << " |\n";
 
     cout << "|" << string(TW, '-') << "|\n";
 
@@ -1251,12 +1251,12 @@ void runComparison() {
         memStr << calcMemoryMB(cnt) << " MB";
 
         cout << "|"
-             << left  << setw(24) << (" " + name)
-             << right << setw(13) << cmp
-             << right << setw(13) << mov
-             << right << setw(14) << timeStr.str()
-             << right << setw(14) << memStr.str()
-             << " |\n";
+            << left << setw(23) << (" " + name)
+            << left << setw(13) << cmp
+            << left << setw(13) << mov
+            << left << setw(14) << timeStr.str()
+            << left << setw(15) << memStr.str()
+            << " |\n";
     };
 
     printRow("Original",  cmp1, mov1, ms1, n);
@@ -1267,11 +1267,27 @@ void runComparison() {
 
     // Complexity table
     cout << "|" << centerText("[ COMPLEXITY THEORY ]", TW) << "|\n";
-    cout << "|" << left << setw(TW) << " Algoritma         Best Case     Avg Case      Worst Case" << "|\n";
+    cout << "|"
+     << left
+     << setw(16) << " Algoritma"
+     << setw(18) << "Best Case"
+     << setw(18) << "Avg Case"
+     << setw(27) << "Worst Case"
+     << "|\n";
     cout << "|" << string(TW, '-') << "|\n";
-    cout << "|" << left << setw(TW) << " Original          O(n log n)    O(n^2)        O(n^2)" << "|\n";
-    cout << "|" << left << setw(TW) << " Knuth             O(n log n)    O(n^1.5)      O(n^1.5)" << "|\n";
-    cout << "|" << left << setw(TW) << " Sedgewick         O(n log n)    O(n^1.3)      O(n^1.3)" << "|\n";
+    auto printComplexityRow = [](string algo, string best, string avg, string worst)
+    {
+        cout << "|"
+            << left
+            << setw(16) << (" " + algo)
+            << setw(18) << best
+            << setw(18) << avg
+            << setw(27) << worst
+            << "|\n";
+    };
+    printComplexityRow("Original", "O(n log n)", "O(n^1.5)", "O(n^2)");
+    printComplexityRow("Knuth", "O(n log n)", "O(n^1.5)", "O(n^1.5)");
+    printComplexityRow("Sedgewick", "O(n log n)", "O(n^1.3)", "O(n^1.3)");
     cout << "|" << string(TW, '_') << "|\n";
 
     string fastestAlgo = "Original";
@@ -1296,9 +1312,9 @@ void runComparison() {
     _getch();
 }
 
-// ============================================================
+
 //  BENCHMARK MULTI DATASET
-// ============================================================
+
 void runBenchmarkMulti() {
     const int MAX_DS = 10;
     string filenames[MAX_DS];
@@ -1436,7 +1452,7 @@ void runBenchmarkMulti() {
     // --- Step 4: display results table ---
     clearScreen();
 
-    const int TW = 78;
+    const int TW = 84;
     cout << "\n " << string(TW, '_') << "\n";
     cout << "|" << centerText("BENCHMARK MULTI DATASET", TW) << "|\n";
     cout << "|" << centerText("Field: " + fieldName +
@@ -1601,16 +1617,20 @@ void runBenchmarkMulti() {
     }
 }
 
-// ============================================================
+
+
+
+
+
 //  MAIN
-// ============================================================
+
 int main() {
     hideCursor();
     showSplashScreen();
-
+    
     const int MAX_ITEMS = 10;
     int cursor = 0;
-
+    
     while (true) {
         drawMainMenu(cursor);
 
@@ -1649,36 +1669,43 @@ int main() {
                 // ---- Tampilkan Data ----
                 case 1:
                     displayData();
+                    clearScreen();
                     break;
 
                 // ---- Shell Sort Original ----
                 case 2:
                     runSort(1);
+                    clearScreen();
                     break;
 
                 // ---- Shell Sort Knuth ----
                 case 3:
                     runSort(2);
+                    clearScreen();
                     break;
 
                 // ---- Shell Sort Sedgewick ----
                 case 4:
                     runSort(3);
+                    clearScreen();
                     break;
 
                 // ---- Bandingkan Semua Algoritma ----
                 case 5:
                     runComparison();
+                    clearScreen();
                     break;
 
                 // ---- Benchmark Multi Dataset ----
                 case 6:
                     runBenchmarkMulti();
+                    clearScreen();
                     break;
 
                 // ---- Informasi Dataset ----
                 case 7:
                     showDatasetInfo();
+                    clearScreen();
                     break;
 
                 // ---- Export CSV ----
@@ -1700,6 +1727,7 @@ int main() {
                             _getch();
                         }
                     }
+                    clearScreen();
                     break;
                 }
 
